@@ -49,6 +49,7 @@ import select
 
 
 _log = logging.getLogger(__name__)
+_log.setLevel(40)
 
 
 class RemoteObject(object):
