@@ -107,6 +107,9 @@ class RemoteObject(object):
     method = None 
     notify = None
     pipe = None
+
+    def async(self, callback):
+        return Proxy(self._conn, obj=self.name, sync_type=1, callback=callback)
     
     @property
     def connection(self): 
@@ -635,7 +638,7 @@ class Connection(object): # TODO: Split this class in simple ones
             self._send_error(item, 'Unknown format')
         return True
     
-    def proxy(self, sync_type, name, args, kwargs):
+    def proxy(self, sync_type, name, args, kwargs, callback = None):
         """
         Call method on server.
 
@@ -666,7 +669,7 @@ class Connection(object): # TODO: Split this class in simple ones
             self.write(json.dumps(data, self))
             return None
                     
-        req = Request(self, data)
+        req = Request(self, data, callback = callback)
         if sync_type == 0: 
             return req.value
         if sync_type == 3:

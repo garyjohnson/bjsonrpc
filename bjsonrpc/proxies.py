@@ -28,10 +28,15 @@ class Proxy(object):
         functions of *RemoteObject*)
         
     """
-    def __init__(self, conn, sync_type, obj = None):
+    def __init__(self, conn, sync_type, obj = None, callback = None):
         self._conn = conn
         self._obj = obj
         self.sync_type = sync_type
+        self._callback = None
+
+    @property
+    def callback(self):
+        return self._callback
 
     def __getattr__(self, name):
         if self._obj:
@@ -42,7 +47,7 @@ class Proxy(object):
                 Decorator-like function that forwards all calls to proxy 
                 method of connection.
             """
-            return self._conn.proxy(self.sync_type, name, args, kwargs)
+            return self._conn.proxy(self.sync_type, name, args, kwargs, callback = self._callback)
         #print name
         function.__name__ = str(name)
         function._conn = self._conn

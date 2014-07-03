@@ -84,13 +84,15 @@ class Request(object):
             may be valid for other implementations.
             
     """
-    def __init__(self, conn, request_data):
+    def __init__(self, conn, request_data, callback=None):
         self.conn = conn
         self.data = request_data
         self.responses = Queue()
         # TODO: Now that we have a Queue, do we need an Event (and a cv)?
         self.event_response = Event()
         self.callbacks = []
+        if callback:
+            self.callbacks.append(callback)
         self.thread_wait = self.event_response.wait
         self.request_id = None
         self.auto_close = False
