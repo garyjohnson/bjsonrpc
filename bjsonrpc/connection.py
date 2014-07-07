@@ -108,9 +108,6 @@ class RemoteObject(object):
     notify = None
     pipe = None
 
-    def async(self, callback):
-        return Proxy(self._conn, obj=self.name, sync_type=1, callback=callback)
-    
     @property
     def connection(self): 
         """
@@ -195,6 +192,9 @@ class Connection(object): # TODO: Split this class in simple ones
     method = None 
     notify = None
     pipe = None
+
+    def async(self, callback):
+        return Proxy(self._conn, obj=self.name, sync_type=1, callback=callback)
     
     @classmethod
     def setmaxtimeout(cls, operation, value):
